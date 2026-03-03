@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>リダイレクト中...</title>
   <script>
-    const messages = [
+    var messages = [
       "今日からスキルプラスで勉強始めます。まずは動画編集から",
       "スキルプラス始めてみた。とりあえず1ヶ月やってみる",
       "スキルプラスで学び始めました。副業できるくらいにはなりたい",
@@ -27,9 +27,28 @@
       "スキルプラスで今日から頑張る。1年後の自分に期待"
     ];
 
-    const text = messages[Math.floor(Math.random() * messages.length)] + "\n\nスキルプラス";
-    window.location.replace("https://x.com/intent/post?text=" + encodeURIComponent(text));
+    var text = messages[Math.floor(Math.random() * messages.length)] + "\n\nスキルプラス";
+    var encoded = encodeURIComponent(text);
+
+    // メインURL（x.com）で遷移を試み、失敗時は旧ドメイン（twitter.com）にフォールバック
+    var mainUrl = "https://x.com/intent/post?text=" + encoded;
+    var fallbackUrl = "https://twitter.com/intent/tweet?text=" + encoded;
+
+    try {
+      window.location.replace(mainUrl);
+    } catch (e) {
+      window.location.replace(fallbackUrl);
+    }
+
+    // 3秒経ってもページに残っている場合はフォールバックURLへ
+    setTimeout(function() {
+      window.location.href = fallbackUrl;
+    }, 3000);
   </script>
+  <!-- JavaScript無効時のフォールバック -->
+  <noscript>
+    <meta http-equiv="refresh" content="0;url=https://x.com/intent/post?text=%E3%82%B9%E3%82%AD%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B9%E3%81%A7%E4%BB%8A%E6%97%A5%E3%81%8B%E3%82%89%E5%8B%89%E5%BC%B7%E5%A7%8B%E3%82%81%E3%81%BE%E3%81%99%EF%BC%81%0A%0A%E3%82%B9%E3%82%AD%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B9">
+  </noscript>
 </head>
 <body></body>
 </html>
